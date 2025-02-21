@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:lottie/lottie.dart';
 import 'package:weather_app/models/weather_model.dart';
 import 'package:weather_app/services/weather_service.dart';
 
@@ -6,23 +7,22 @@ class WeatherPage extends StatefulWidget {
   const WeatherPage({super.key});
 
   @override
-  State<WeatherPage> createState() =>_WeatherPageState();
+  State<WeatherPage> createState() => _WeatherPageState();
 }
 
 class _WeatherPageState extends State<WeatherPage> {
-
-  //api key
-  final _WeatherService = WeatherService('8bb69ae44a4c4a6ee561250827959052');
+  // API key
+  final _weatherService = WeatherService('8bb69ae44a4c4a6ee561250827959052');
   Weather? _weather;
-  
-  //fetch weather
-  _fetchWeather() async{
-    //get the current city
-    String cityName = await _WeatherService.getCurrentCity();
 
-    //get weather for city
+  // Fetch weather
+  _fetchWeather() async {
+    // Get the current city
+    String cityName = await _weatherService.getCurrentCity();
+
+    // Get weather for city
     try {
-      final weather = await _WeatherService.getWeather(cityName);
+      final weather = await _weatherService.getWeather(cityName);
       setState(() {
         _weather = weather;
       });
@@ -31,27 +31,58 @@ class _WeatherPageState extends State<WeatherPage> {
     }
   }
 
-  //weather animations
+  // Weather animation
+  String getWeatherAnimation(String? mainCondition) {
+    if (mainCondition == null) return 'assets/sunny.json'; // Default to sunny
 
-  //init state 
+    switch (mainCondition.toLowerCase()) {
+      case 'clouds':
+      case 'mist':
+      case 'smoke':
+      case 'haze':
+      case 'dust':
+      case 'fog':
+        return 'assets/cloud.json';
+      case 'rain':
+      case 'drizzle':
+      case 'shower rain':
+        return 'assets/rain.json';
+      case 'thunderstorm':
+        return 'assets/thunder.json';
+      case 'clear':
+        return 'assets/sunny.json';
+      default:
+        return 'assets/sunny.json';
+    }
+  } // <-- Added missing closing bracket here
+
+  // Init state
   @override
   void initState() {
     super.initState();
-
-    //fetch weather on startup
+    // Fetch weather on startup
     _fetchWeather();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center (
-        child: Column (
-          mainAxisAlignment: MainAxisAlignment. center, 
+      backgroundColor: Colors.grey[800],
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // city name
-            Text (_weather?.cityName ?? "loading city.."),
-            // temperature
-            Text ('${_weather?.temperature.round()}°C')
+            // City name
+            Text(_weather?.cityName ?? "Loading city.."),
+
+            // Weather animations
+            Lottie.asset(getWeatherAnimation(_weather?.mainCondition)),
+
+            // Temperature
+            Text('${_weather?.temperature.round()}°C'),
+
+            // Weather condition
+            Text(_weather?.mainCondition ?? "")
           ],
         ),
       ),
