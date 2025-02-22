@@ -26,7 +26,7 @@ A simple Flutter-based Weather App that allows users to check the weather of any
 ## Installation 📥
 1. Clone this repository:
    ```sh
-   git clone https://github.com/your-username/weather-app.git
+   git clone https://github.com/vimethc/weather-app.git
    ```
 2. Navigate to the project directory:
    ```sh
