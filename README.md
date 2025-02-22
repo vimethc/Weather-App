@@ -30,7 +30,7 @@ A simple Flutter-based Weather App that allows users to check the weather of any
    ```
 2. Navigate to the project directory:
    ```sh
-   cd weather-app
+   cd Weather-App
    ```
 3. Install dependencies:
    ```sh
